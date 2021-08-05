@@ -12,9 +12,12 @@ module.exports = class Models {
               unique: true
           },
           phone_number: {
-            type: Sequelize.DataTypes.STRING(12),
-            is: /^998[389][01345789][0-9]{7}$/,
+            type: DataTypes.STRING(12),
+            validate: {
+                is: /^998[389][01345789][0-9]{7}$/,
+            },
             allowNull: false,
+            unique: true
         },
           first_name: {
               type: DataTypes.STRING(32),

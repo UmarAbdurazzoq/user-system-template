@@ -1,4 +1,5 @@
 const { Sequelize, Op } = require("sequelize");
+const { generateCrypt } = require("../modules/bcrypt")
 const { PG_URL, PASSWORD, FIRSTNAME, LASTNAME, PHONE } = require("../config");
 const {
     SessionModel,
@@ -30,14 +31,13 @@ module.exports = async () => {
             },
         });
 
-        let admin = await db.users.findAll({});
- 
-        if(!(admin[0])){
+        let admin = await db.users.findOne({where: {role: 'super-admin'}});
+        if(!(admin)){
             await db.users.create({
                 first_name: FIRSTNAME,
                 last_name: LASTNAME,
                 phone_number: PHONE,
-                password: PASSWORD,
+                password: await generateCrypt(PASSWORD),
                 role: "super-admin" 
             })
         } 

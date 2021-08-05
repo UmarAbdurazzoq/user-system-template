@@ -26,9 +26,7 @@ module.exports = class UserController {
     static async CreateUser(req, res) {
         try {
             const { users } = req.psql;
-
             const { firstName, lastName, phone, password, role } = req.body
-
             let user = await users.findOne({
                 where: {
                     phone_number: phone,
@@ -41,19 +39,19 @@ module.exports = class UserController {
 
             if (role) {
                 user = await users.create({
-                    firt_name: firstName,
-                    last_name: lastName,
-                    phone_number: phone,
-                    password: await generateCrypt(password),
-                });
-                
-            } else {
-                user = await users.create({
-                    firt_name: firstName,
+                    first_name: firstName,
                     last_name: lastName,
                     phone_number: phone,
                     password: await generateCrypt(password),
                     role: role,
+                });
+                
+            } else {
+                user = await users.create({
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_number: phone,
+                    password: await generateCrypt(password),
                 });
             }
 
@@ -97,14 +95,14 @@ module.exports = class UserController {
             }
 
             const session = await sessions.create({
-                user_id: user.user_id,
+                user_id: user.id,
                 ip_address: ipAddress,
                 user_agent: userAgent,
                 role: user.role,
             });
 
             const token = generateToken({
-                session_id: session.session_id,
+                session_id: session.id,
             });
 
             res.status(200).json({

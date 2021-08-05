@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
     const { sessions } = await req.psql 
     const { session_id } = await verifyToken(req.headers.token)
 
-    const session = session_id ? await sessions.findOne({where:{session_id: session_id}}) : undefined
+    const session = session_id ? await sessions.findOne({where:{id: session_id}}) : undefined
 
     if (!session || !session.dataValues.user_agent) {
       throw new Error("sesssion not founded")
